@@ -1,0 +1,19 @@
+// cadMeshImport installer: drag and drop this file into a Maya viewport.
+
+global proc cadMeshImport_installLocator() {}
+
+{
+    string $where = `whatIs cadMeshImport_installLocator`;
+    // whatIs returns "Mel procedure found in: <path to this file>"
+    string $file = `substring $where 25 (size($where))`;
+    string $dir = dirname($file);
+    python("import sys\n"
+         + "_d = r'" + $dir + "'\n"
+         + "sys.path.insert(0, _d)\n"
+         + "try:\n"
+         + "    import importlib, installer\n"
+         + "    importlib.reload(installer)\n"
+         + "    installer.install(_d)\n"
+         + "finally:\n"
+         + "    sys.path.remove(_d)\n");
+}
